@@ -1,18 +1,16 @@
-import app from "./app.js";
+import { app } from "./app.js";
 import mongoose from "mongoose";
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI =
-	process.env.MONGO_URI || "mongodb://localhost:27017/gym-notes-app";
+const { DB_HOST } = process.env;
+const { PORT = 3000 } = process.env;
 
 mongoose
-	.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+	.connect(DB_HOST)
 	.then(() => {
-		console.log("MongoDB connected");
-		app.listen(PORT, () => {
-			console.log(`Server running on port ${PORT}`);
-		});
+		app.listen(PORT);
+		console.log("Database connection successful");
 	})
-	.catch((err) => {
-		console.error("MongoDB connection error:", err);
+	.catch((error) => {
+		console.log(error.message);
+		process.exit(1);
 	});
