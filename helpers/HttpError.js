@@ -1,6 +1,14 @@
-export const HttpError = (code, message) => {
-  const error = new Error(message);
-  error.status = code;
+const messageList = {
+	400: "Bad Request",
+	401: "Unauthorized",
+	403: "Forbidden",
+	404: "Not Found",
+	409: "Conflict",
+};
 
-  return error;
-}
+export const HttpError = (code, message = messageList[code]) => {
+	const error = new Error(message);
+	error.status = code;
+
+	return error;
+};

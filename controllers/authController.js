@@ -8,6 +8,7 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
 	const { username, password } = req.body;
+	console.log(username, password);
 	const existingUser = await User.findOne({ username });
 
 	if (existingUser) {
@@ -28,11 +29,12 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
 	const { username, password } = req.body;
-	const user = await User.findOne({ email });
-	if (!user) throw HttpError(401, "Email or password is wrong");
+	const user = await User.findOne({ username });
+	if (!user) throw HttpError(401, "This user is not registered");
 
 	const pwdCheck = await bcrypt.compare(password, user.password);
-	if (!pwdCheck) throw HttpError(401, "Email or password is wrong");
+	console.log(pwdCheck);
+	if (!pwdCheck) throw HttpError(401, "Username or password is wrong");
 
 	const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "23h" });
 
@@ -40,9 +42,7 @@ const login = async (req, res) => {
 
 	res.status(200).json({
 		token,
-		user: {
-			username,
-		},
+		user: { username },
 	});
 };
 
@@ -54,8 +54,8 @@ const logout = async (req, res) => {
 
 const current = async (req, res) => {
 	const { _id } = req.user;
-	const { name } = await User.findById(_id);
-	res.status(200).json({ name });
+	const { username } = await User.findById(_id);
+	res.status(200).json({ username });
 };
 
 export const ctrl = {

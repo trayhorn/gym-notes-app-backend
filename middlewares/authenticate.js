@@ -4,7 +4,7 @@ import { User } from "../models/User.js";
 
 const { SECRET_KEY } = process.env;
 
-export const authenticate = async (req, res, next) => {
+export const authenticate = async (req, _, next) => {
 	const { authorization = "" } = req.headers;
 	const [bearer, token] = authorization.split(" ");
 
