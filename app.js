@@ -3,6 +3,8 @@ import morgan from "morgan";
 import "dotenv/config";
 import cors from "cors";
 import authRouter from "./routes/authRouter.js";
+import workoutsRouter from "./routes/workoutsRouter.js";
+import paramsRouter from "./routes/paramsRouter.js";
 
 export const app = express();
 
@@ -11,6 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRouter);
+app.use("/workouts", workoutsRouter);
+app.use("/params", paramsRouter);
 
 app.use((_, res) => {
 	res.status(404).json({ message: "Route not found" });

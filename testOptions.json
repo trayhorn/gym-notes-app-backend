@@ -1,0 +1,13 @@
+{
+	"owner": "68b5d6e72be506efb5041190",
+	"exercises": [
+		"Bench Press",
+		"Squat",
+		"Deadlift",
+		"Overhead Press",
+		"Pull-ups",
+		"Bicep Curls"
+	],
+	"reps": ["4x12", "4x10", "3x10", "3x8", "5x5"],
+	"weights": ["10 kg", "12.5 kg", "15 kg", "20 kg", "25 kg", "30 kg"]
+}

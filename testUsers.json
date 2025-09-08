@@ -1,6 +1,6 @@
 [
 	{ "id": 1, "username": "testuser1", "password": "password123" },
-	{ "id": 2, "username": "gymfan", "password": "liftStrong!" },
+	{ "id": 2, "username": "gymfan", "password": "liftStrong" },
 	{ "id": 3, "username": "fitlife", "password": "trainHard2025" },
 	{ "id": 4, "username": "ironman", "password": "benchPress90" },
 	{ "id": 5, "username": "repMaster", "password": "reps4days" }

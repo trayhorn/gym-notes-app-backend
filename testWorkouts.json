@@ -1,0 +1,47 @@
+[
+	{
+		"owner": "68b5d6e72be506efb5041190",
+		"date": "2025-09-01",
+		"exercises": [
+			{ "name": "Bench Press", "reps": "4x10", "weight": "60kg" },
+			{ "name": "Incline Dumbbell Press", "reps": "3x12", "weight": "20kg" },
+			{ "name": "Push-ups", "reps": "3x20", "weight": "bodyweight" }
+		]
+	},
+	{
+		"owner": "68b5d6e72be506efb5041190",
+		"date": "2025-09-02",
+		"exercises": [
+			{ "name": "Squat", "reps": "4x8", "weight": "80kg" },
+			{ "name": "Leg Press", "reps": "3x12", "weight": "120kg" },
+			{ "name": "Calf Raises", "reps": "4x15", "weight": "40kg" }
+		]
+	},
+	{
+		"owner": "68b5d6e72be506efb5041190",
+		"date": "2025-09-03",
+		"exercises": [
+			{ "name": "Pull-ups", "reps": "3x10", "weight": "bodyweight" },
+			{ "name": "Barbell Row", "reps": "4x10", "weight": "50kg" },
+			{ "name": "Lat Pulldown", "reps": "3x12", "weight": "40kg" }
+		]
+	},
+	{
+		"owner": "68b5d6e72be506efb5041190",
+		"date": "2025-09-04",
+		"exercises": [
+			{ "name": "Overhead Press", "reps": "4x8", "weight": "40kg" },
+			{ "name": "Lateral Raises", "reps": "3x15", "weight": "8kg" },
+			{ "name": "Arnold Press", "reps": "3x12", "weight": "15kg" }
+		]
+	},
+	{
+		"owner": "68b5d6e72be506efb5041190",
+		"date": "2025-09-05",
+		"exercises": [
+			{ "name": "Deadlift", "reps": "4x6", "weight": "100kg" },
+			{ "name": "Pull-ups", "reps": "3x8", "weight": "bodyweight" },
+			{ "name": "Face Pulls", "reps": "3x15", "weight": "25kg" }
+		]
+	}
+]
