@@ -8,4 +8,6 @@ router.get("/", authenticate, ctrl.getAllWorkouts);
 
 router.post("/add", authenticate, ctrl.addWorkout);
 
+router.delete("/delete", authenticate, ctrl.deleteWorkout);
+
 export default router;
