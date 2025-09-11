@@ -8,7 +8,7 @@ export const authenticate = async (req, _, next) => {
 	const { authorization = "" } = req.headers;
 	const [bearer, token] = authorization.split(" ");
 
-	if (!bearer || !token) throw HttpError(401);
+	if (!bearer || !token) next(HttpError(401));
 
 	try {
 		const { id } = jwt.verify(token, SECRET_KEY);

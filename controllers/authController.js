@@ -8,7 +8,6 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
 	const { username, password } = req.body;
-	console.log(username, password);
 	const existingUser = await User.findOne({ username });
 
 	if (existingUser) {
@@ -21,10 +20,7 @@ const register = async (req, res) => {
 	const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "23h" });
 	await User.findByIdAndUpdate(user._id, { token });
 
-	res.status(201).json({
-		token,
-		user: { username },
-	});
+	res.status(201).json({ token, username });
 };
 
 const login = async (req, res) => {
@@ -40,10 +36,7 @@ const login = async (req, res) => {
 
 	await User.findByIdAndUpdate(user._id, { token });
 
-	res.status(200).json({
-		token,
-		user: { username },
-	});
+	res.status(201).json({ token, username });
 };
 
 const logout = async (req, res) => {
@@ -54,8 +47,8 @@ const logout = async (req, res) => {
 
 const current = async (req, res) => {
 	const { _id } = req.user;
-	const { username } = await User.findById(_id);
-	res.status(200).json({ username });
+	const { token, username } = await User.findById(_id);
+	res.status(200).json({ token, username });
 };
 
 export const ctrl = {

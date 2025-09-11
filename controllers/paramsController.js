@@ -5,7 +5,9 @@ const getAllParams = async (req, res) => {
   const { _id } = req.user;
   const params = await TrainingOption.find({ owner: _id.toString() });
 
-  res.status(200).json({ params });
+  res.status(200).json({
+    params: params[0]
+  });
 }
 
 const addParam = async (req, res) => {
