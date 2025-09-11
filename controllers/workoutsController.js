@@ -12,7 +12,9 @@ const addWorkout = async (req, res) => {
   const { _id } = req.user;
 
   const createdWorkout = await Workout.create({ owner: _id.toString(), ...req.body });
-  res.status(201).json({createdWorkout});
+  res.status(201).json({
+		message: "success",
+	});
 }
 
 const deleteWorkout = async (req, res) => {
