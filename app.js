@@ -9,7 +9,11 @@ import paramsRouter from "./routes/paramsRouter.js";
 export const app = express();
 
 app.use(morgan("tiny"));
-app.use(cors());
+app.use(
+	cors({
+		origin: "*",
+	})
+);
 app.use(express.json());
 
 app.use("/auth", authRouter);
