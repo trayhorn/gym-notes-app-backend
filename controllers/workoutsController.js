@@ -3,7 +3,7 @@ import { Workout } from "../models/Workout.js";
 
 const getAllWorkouts = async (req, res) => {
   const { _id } = req.user;
-  const workouts = await Workout.find({ owner: _id.toString() });
+  const workouts = await Workout.find({ owner: _id.toString() }).sort({ date: -1 });
 
   res.status(200).json({ workouts });
 }
@@ -11,15 +11,13 @@ const getAllWorkouts = async (req, res) => {
 const addWorkout = async (req, res) => {
   const { _id } = req.user;
 
-  const createdWorkout = await Workout.create({ owner: _id.toString(), ...req.body });
+  await Workout.create({ owner: _id.toString(), ...req.body });
   res.status(201).json({
 		message: "success",
 	});
 }
 
 const deleteWorkout = async (req, res) => {
-  const { _id } = req.user;
-
   const { id: workoutId } = req.body;
 
   await Workout.findByIdAndDelete(workoutId);
