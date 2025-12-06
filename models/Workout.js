@@ -5,7 +5,7 @@ const exerciseSchema = new Schema(
 		name: { type: String, required: true },
 		reps: { type: String, required: true },
 		weight: { type: String, required: true },
-		supersetGroup: { type: Number, required: false },
+		supersetGroup: { type: String, required: false },
 	},
 	{ _id: false }
 );
