@@ -1,4 +1,5 @@
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
+import { HttpError } from "../helpers/HttpError.js";
 import { TrainingOption } from "../models/TrainingOption.js";
 
 const getAllParams = async (req, res) => {
@@ -22,7 +23,7 @@ const addParam = async (req, res) => {
   res.status(201).json(updatedParam);
 }
 
-const deleteParam = async (req, res) => {
+const editParam = async (req, res) => {
   const { _id } = req.user;
   const { type, value } = req.body;
 
@@ -37,9 +38,27 @@ const deleteParam = async (req, res) => {
   res.status(201).json(updatedParam);
 }
 
+const deleteParam = async (req, res) => {
+  const {_id} = req.user;
+  const { type, item } = req.body;
+
+  if(!type || !item) throw HttpError(400, "Both arguments are required");
+
+  await TrainingOption.updateOne({ owner: _id.toString() }, {
+    $pull: {[type]: item}
+  });
+
+  const params = await TrainingOption.find({owner: _id.toString()})
+
+  res.status(200).json({
+    params
+  });
+}
+
 
 export const ctrl = {
 	getAllParams: ctrlWrapper(getAllParams),
 	addParam: ctrlWrapper(addParam),
-	deleteParam: ctrlWrapper(deleteParam),
+	editParam: ctrlWrapper(editParam),
+  deleteParam: ctrlWrapper(deleteParam)
 };

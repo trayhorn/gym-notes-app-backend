@@ -8,6 +8,8 @@ router.get("/", authenticate, ctrl.getAllParams);
 
 router.patch("/add", authenticate, ctrl.addParam);
 
-router.patch("/delete", authenticate, ctrl.deleteParam);
+router.patch("/edit", authenticate, ctrl.editParam);
+
+router.delete("/delete", authenticate, ctrl.deleteParam)
 
 export default router;
