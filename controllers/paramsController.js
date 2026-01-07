@@ -15,12 +15,16 @@ const addParam = async (req, res) => {
   const { _id } = req.user;
   const { type, value } = req.body;
 
-  const param = await TrainingOption.find({ owner: _id.toString() });
-  const updatedParam = await TrainingOption.findByIdAndUpdate(param[0]._id, {
-    [type]: [...param[0][type], value]
-  }, {returnDocument: "after"});
+  const param = await TrainingOption.findOne({ owner: _id.toString() });
+  if (param[type].includes(value)) {
+    throw HttpError(400, `This value already exists in ${type}`);
+  }
 
-  res.status(201).json(updatedParam);
+  await TrainingOption.updateOne({ owner: _id.toString() }, {
+    $push: { [type]: value }
+  });
+
+  res.status(201).json({message: "success"});
 }
 
 const editParam = async (req, res) => {
