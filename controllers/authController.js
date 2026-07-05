@@ -43,7 +43,7 @@ const register = async (req, res) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Verify your email",
-		html: `<p>Click <a href="${process.env.BASE_URL}/verify-email?token=${emailToken}">here</a> to verify your email.</p>`,
+		html: `<p>Click <a href="${process.env.FE_APP_URL}/verify-email?token=${emailToken}">here</a> to verify your email.</p>`,
   });
 
   res.status(201).json({ token, username });
