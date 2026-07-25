@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { HttpError } from "../helpers/HttpError.js";
-import nodemailer from "nodemailer";
+import getTransporter from "../helpers/transporter.js";
 
 const { SECRET_KEY } = process.env;
 
@@ -21,7 +21,7 @@ const register = async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-	// TODO: handle nodemailer error and delete the User
+  // TODO: handle nodemailer error and delete the User
   const user = await User.create({ email, username, password: hashedPassword });
 
   const emailToken = jwt.sign({ email: user.email }, SECRET_KEY, {
@@ -31,19 +31,14 @@ const register = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token, emailToken });
 
   // Sending email verification
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+
+  const transporter = getTransporter();
 
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Verify your email",
-		html: `<p>Click <a href="${process.env.FE_APP_URL}/verify-email?token=${emailToken}">here</a> to verify your email.</p>`,
+    html: `<p>Click <a href="${process.env.BASE_URL}/verify-email?token=${emailToken}">here</a> to verify your email.</p>`,
   });
 
   res.status(201).json({ token, username });
@@ -55,7 +50,6 @@ const login = async (req, res) => {
   if (!user) throw HttpError(401, "This user is not registered");
 
   const pwdCheck = await bcrypt.compare(password, user.password);
-  console.log(pwdCheck);
   if (!pwdCheck) throw HttpError(401, "Username or password is wrong");
 
   const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: "23h" });
@@ -82,14 +76,70 @@ const verifyEmail = async (req, res) => {
   const { token } = req.body;
   if (!token) throw HttpError(400, "Missing token");
 
-  const { email } = jwt.verify(token, SECRET_KEY);
+  let email;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    email = decoded.email;
+  } catch (error) {
+    throw HttpError(400, "Invalid or expired token");
+  }
+
   const user = await User.findOne({ email });
   if (!user) throw HttpError(404, "User not found");
   if (user.isVerified) throw HttpError(400, "User is already verified");
 
-  await User.findByIdAndUpdate(user._id, { isVerified: true, emailToken: null });
+  await User.findByIdAndUpdate(user._id, {
+    isVerified: true,
+    emailToken: null,
+  });
 
   res.status(200).json({ message: "Verification successful" });
+};
+
+// Password reset request controller
+
+const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if(user) {
+    const resetPasswordToken = jwt.sign({ email: user.email }, SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    const transporter = getTransporter();
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset Request",
+      // Link leads to the FE endpoint
+      html: `<p>Click <a href="${process.env.BASE_URL}/reset-password?token=${resetPasswordToken}">here</a> to reset your password.</p>`,
+    });
+  }
+
+  res.status(200).json({ message: "Password reset email sent" });
+};
+
+const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) throw HttpError(400, "Missing token or new password");
+
+  let email;
+  try {
+    const decoded = jwt.verify(token, SECRET_KEY);
+    email = decoded.email;
+  } catch (error) {
+    throw HttpError(400, "Invalid or expired token");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) throw HttpError(404, "Something went wrong");
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await User.findByIdAndUpdate(user._id, { password: hashedPassword });
+
+  res.status(200).json({ message: "Password reset successful" });
 };
 
 export const ctrl = {
@@ -98,4 +148,6 @@ export const ctrl = {
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
   verifyEmail: ctrlWrapper(verifyEmail),
+  requestPasswordReset: ctrlWrapper(requestPasswordReset),
+  resetPassword: ctrlWrapper(resetPassword),
 };
