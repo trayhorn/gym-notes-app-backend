@@ -1,15 +1,15 @@
-import express from "express";
-import { authenticate } from "../middlewares/authenticate.js";
-import { ctrl } from "../controllers/paramsController.js";
+import express from 'express'
+import { authenticate } from '../middlewares/authenticate.js'
+import { ctrl } from '../controllers/paramsController.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get("/", authenticate, ctrl.getAllParams);
+router.get('/', authenticate, ctrl.getAllParams)
 
-router.patch("/add", authenticate, ctrl.addParam);
+router.patch('/add', authenticate, ctrl.addParam)
 
-router.patch("/edit", authenticate, ctrl.editParam);
+router.patch('/edit', authenticate, ctrl.editParam)
 
-router.delete("/delete", authenticate, ctrl.deleteParam)
+router.delete('/delete', authenticate, ctrl.deleteParam)
 
-export default router;
+export default router
