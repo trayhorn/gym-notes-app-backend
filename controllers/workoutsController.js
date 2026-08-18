@@ -3,9 +3,10 @@ import { Workout } from '../models/Workout.js'
 
 const getAllWorkouts = async (req, res) => {
   const { _id } = req.user
-  const workouts = await Workout.find({ owner: _id.toString() }).sort({
-    date: -1,
-  })
+  const workouts = await Workout.find(
+    { owner: _id.toString() },
+    { owner: 0 }
+  ).sort({ date: -1 })
 
   res.status(200).json({ workouts })
 }
