@@ -7,7 +7,7 @@ const exerciseSchema = new Schema(
     weight: { type: String, required: true },
     supersetGroup: { type: String, required: false },
   },
-  { _id: false }
+  { _id: false, versionKey: false, timestamps: false }
 )
 
 const workoutSchema = new Schema({
